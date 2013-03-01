@@ -61,6 +61,34 @@ class FacebookDebugTokenMiddleware(object):
         request.facebook = DjangoFacebook(user)
         return None
 
+class FacebookSignedRequestMiddleware(object):
+    """
+    Only process the signed request from Facebook, don't
+    transparently login the user.
+
+    """
+
+    def process_request(self, request):
+        """
+        Add 'fb_signed_request' into the request context
+
+        If no signed request was found, request.fb_signed_request will be None. Otherwise it will
+        contain a dict object containing the contents of the signed_request.
+
+        if a FB user is present, create request.facebook that contains the user.
+
+        """
+
+        if request.POST.get('signed_request'):
+            signed_request = request.POST["signed_request"]
+            data = facebook.parse_signed_request(signed_request,
+                                                 settings.FACEBOOK_SECRET_KEY)
+            if data:
+                request.fb_signed_request = data
+            else:
+                request.fb_signed_request = None
+
+        return None
 
 class FacebookMiddleware(object):
     """
