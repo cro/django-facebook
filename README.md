@@ -61,6 +61,40 @@ on the backend:
 
 Middleware:
 ----------
+
+### django_facebook.middleware.FacebookSignedRequestMiddleware:
+
+This provides access to Facebook's signed_request. This is useful
+for Page Tabs, where you won't have access to a real Facebook User
+since they have not granted you permission to the app.
+
+Adding this to MIDDLEWARE_CLASSES will add the 'signed_request'
+attribute to the request.  Building a "Like Gate" becomes trivial.  A
+Django template to do this could look like this:
+
+    {% load facebook %}
+    <!DOCTYPE html>
+    <html>
+    <head>
+        {% facebook_init %}
+        {% block facebook_code %}{% endblock %}
+        {% endfacebook %}
+        <title>Like us!</title>
+    </head>
+    <body>
+        {% if not signed_request.page.liked %}
+        <h1>LIKE us on Facebook!</h1>
+        {% else %}
+        <h1>Thank you for liking us on Facebook</h1>
+    </body>
+    {% facebook_load %}
+    </html>
+
+Documentation on the signed_request (especially as it relates to Page Tabs)
+can be found on Facebook's developer site.
+
+### django_facebook.middleware.FacebookMiddleware:
+
 This provides seamless access to the Facebook Graph via request object.
 
 If a user accesses your site with:
