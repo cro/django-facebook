@@ -91,7 +91,8 @@ Django template to do this could look like this:
     </html>
 
 Documentation on the signed_request (especially as it relates to Page Tabs)
-can be found on Facebook's developer site.
+can be found on [Facebook's developer
+site](https://developers.facebook.com/blog/post/462/).
 
 ### django_facebook.middleware.FacebookMiddleware:
 
